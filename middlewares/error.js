@@ -1,8 +1,7 @@
 /** @format */
 
 const errorMiddleware = (err, req, res, next) => {
-  console.log(err);
-  let statusCode = err.statusCode === 200 ? 500 : err.statusCode;
+  let statusCode = res.statusCode == 200 ? 500 : res.statusCode;
   if (err.errors) {
     err.message = err.errors.email.message;
     statusCode = 400;
