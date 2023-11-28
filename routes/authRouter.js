@@ -3,7 +3,6 @@
 const express = require("express");
 const router = express.Router();
 
-
 const {
   registerUser,
   loginUser,
@@ -23,7 +22,6 @@ router
   .get(auth, getUser)
   .post(auth, updateUser)
   .all(methodNotAllowed);
-// router.post("/user/update", auth, );
 router.route("/password/forgot").post(forgotPassword).all(methodNotAllowed);
 router.route("/password/reset").post(resetPassword).all(methodNotAllowed);
 

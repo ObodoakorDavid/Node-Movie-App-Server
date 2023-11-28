@@ -1,0 +1,302 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Movie Api",
+    "description": "API for Movies",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User",
+      "description": "Managing users"
+    },
+    {
+      "name": "Movie",
+      "description": "Retrieving Movies"
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Register",
+        "description": "Creating a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The newly created user's id, image and token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "6516832f3bdaa5d3e07a4db5"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTE2ODMyZjNiZGFhNWQzZTA3YTRkYjUiLCJ1c2VybmFtZSI6ImRhdmlkMDA3IiwiaWF0IjoxNzAwNjQwNTMyLCJleHAiOjE3MDMyMzI1MzJ9.sZyKqQmJi5HLrbqZHaMIli6jBvCoVn4gq7bXu-F3j8M"
+                    },
+                    "image": {
+                      "type": "string",
+                      "example": "https://res.cloudinary.com/demmgc49v/image/upload/v1697220616/movie-app/tmp-5-1697220613691_r6v9fs.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or password not provided"
+          },
+          "500": {
+            "description": "Something went wrong on the server"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Login",
+        "description": "Logging in an already registered user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "JacobIsaac@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "007007"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The logged in user's id, image and token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "6516832f3bdaa5d3e07a4db5"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTE2ODMyZjNiZGFhNWQzZTA3YTRkYjUiLCJ1c2VybmFtZSI6ImRhdmlkMDA3IiwiaWF0IjoxNzAwNjQwNTMyLCJleHAiOjE3MDMyMzI1MzJ9.sZyKqQmJi5HLrbqZHaMIli6jBvCoVn4gq7bXu-F3j8M"
+                    },
+                    "image": {
+                      "type": "string",
+                      "example": "https://res.cloudinary.com/demmgc49v/image/upload/v1697220616/movie-app/tmp-5-1697220613691_r6v9fs.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or password not provided"
+          },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/auth/user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "User Details",
+        "description": "Getting User Details",
+        "responses": {
+          "200": {
+            "description": "User's id and image",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "6516832f3bdaa5d3e07a4db5"
+                    },
+                    "image": {
+                      "type": "string",
+                      "example": "https://res.cloudinary.com/demmgc49v/image/upload/v1697220616/movie-app/tmp-5-1697220613691_r6v9fs.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["User"],
+        "summary": "Update User",
+        "description": "Updating User Details",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Upload Successfull Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Profile Photo Updated!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/movie": {
+      "get": {
+        "tags": ["Movie"],
+        "summary": "All Movies",
+        "description": "Getting All Movies",
+        "responses": {
+          "200": {
+            "description": "User's id and image",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "6516832f3bdaa5d3e07a4db5"
+                    },
+                    "image": {
+                      "type": "string",
+                      "example": "https://res.cloudinary.com/demmgc49v/image/upload/v1697220616/movie-app/tmp-5-1697220613691_r6v9fs.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "name": "Token",
+        "scheme": "bearer",
+        "in": "header"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Invalid Token, Missing Token or Token doesn't start with Bearer",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Something went wrong, try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "Jacob"
+          },
+          "email": {
+            "type": "string",
+            "example": "JacobIsaac@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "007007"
+          }
+        }
+      }
+    }
+  }
+}

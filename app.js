@@ -6,6 +6,8 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 const connectDB = require("./db/connect");
 // middlewares
@@ -22,6 +24,8 @@ const port = process.env.PORT || 3001;
 
 // ==========================================\
 
+const swaggerDoc = require("./swagger/swagger.json");
+
 app.use(morgan("dev"));
 app.use(cors());
 app.use(
@@ -30,6 +34,7 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/movie", movieRouter);

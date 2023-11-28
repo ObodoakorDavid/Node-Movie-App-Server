@@ -19,6 +19,10 @@ const errorMiddleware = (err, req, res, next) => {
     statusCode = 400;
   }
 
+  if (err.statusCode) {
+    statusCode = err.statusCode;
+  }
+
   err.message = !err.message
     ? '"Something went wrong, try again later"'
     : err.message;
