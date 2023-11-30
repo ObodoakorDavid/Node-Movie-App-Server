@@ -26,6 +26,11 @@ const port = process.env.PORT || 3001;
 
 const swaggerDoc = require("./swagger/swagger.json");
 
+const updatedDoc = {
+  ...swaggerDoc,
+  servers: [{ url: process.env.SERVER_URL || "http://localhost:3001" }],
+};
+
 app.use(morgan("dev"));
 app.use(cors());
 app.use(
@@ -34,7 +39,7 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(updatedDoc));
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/movie", movieRouter);
